@@ -6,7 +6,12 @@ class UserService {
   async createUser(userData: IUser): Promise<IUser> {
     try {
       const _user: IUser = await user.create({
-        data: userData,
+        data:{
+          username : userData.username,
+          email:userData.email,
+          name:userData.name,
+          profile_pic:userData.profile_pic,
+        },
       });
       return _user;
     } catch (error) {

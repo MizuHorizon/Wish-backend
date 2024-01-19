@@ -17,9 +17,7 @@ export interface IProduct{
     start_price:number;
     desired_price:number;
     prices:[];
-    trackable:Boolean;
+    trackable:boolean;
     created_at?:Date;
     updated_at?:Date;
-
-    
 }
