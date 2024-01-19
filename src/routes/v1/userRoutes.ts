@@ -1,10 +1,9 @@
 import Express  from "express";
 const app = Express();
-import {createUser} from "../../controllers/userController";
+import {createUser,getById,getByuserName} from "../../controllers/userController";
 
 app.post("/",createUser);
-app.get("/:id")
-
-
+app.get("/:id",getById);
+app.get("/",getByuserName);
 
 export default app;

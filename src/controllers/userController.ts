@@ -20,7 +20,7 @@ export const createUser = async(req:Request,res:Response)=>{
         });
     } catch (error) {
         return res.status(501).json({
-            message : "Successfully created the user!",
+            message : "Something went wrong while creating the user!",
             err : error,
             data : "",
             success : false,
@@ -28,4 +28,46 @@ export const createUser = async(req:Request,res:Response)=>{
     }
 } 
 
+export const getById =async (req:Request,res:Response) => {
+    try {
+        const userId:string = req.params.id;
+        const user =await userService.getUserById(userId
+            );
+            return res.status(201).json({
+                message : "Successfully created the user!",
+                success : false,
+                err : "",
+                data : user
+            });
+
+    } catch (error) {
+        return res.status(501).json({
+            message : "Something went wrong while fetching the user!",
+            err : error,
+            data : "",
+            success : false,
+        })
+    }
+}
+
+export const getByuserName =async (req:Request,res:Response) => {
+    try {
+        const username:string = req.query.username as string;
+        const user =await userService.getUserByUsername(username);
+            return res.status(201).json({
+                message : "Successfully created the user!",
+                success : false,
+                err : "",
+                data : user
+            });
+
+    } catch (error) {
+        return res.status(501).json({
+            message : "Something went wrong while fetching the user!",
+            err : error,
+            data : "",
+            success : false,
+        })
+    }
+}
 

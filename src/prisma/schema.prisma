@@ -16,5 +16,22 @@ model User{
         profile_pic     String
         email           String @unique
         username        String @unique
+        products        Product[] 
+}
+
+model Product{
+        id              String @id @default(auto()) @map("_id") @db.ObjectId
+        user_id         String @unique @db.ObjectId
+        name            String
+        url             String
+        photos          String[]
+        description     String?
+        start_price     Float
+        trackable       Boolean
+        prices          String[]
+        desired_price   Float
+        created_at      DateTime @default(now()) 
+        updated_at      DateTime @updatedAt
+        user            User @relation(fields: [user_id],references: [id])
 }
 
