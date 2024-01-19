@@ -15,5 +15,6 @@ model User{
         name            String
         profile_pic     String
         email           String @unique
+        username        String @unique
 }
 
