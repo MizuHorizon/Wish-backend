@@ -10,7 +10,9 @@ import {
   deleteProduct,
 } from "../../controllers/productController";
 
-app.post("/", createProduct);
+import {getProductDetails} from "../../middlewares/getProductDetails";
+
+app.post("/:id", getProductDetails,createProduct);
 app.get("/:id", getProductbyId);
 app.get("/", getProductbyIdOfUser);
 app.get("/track", getTrackableProductbyIdOfUser);

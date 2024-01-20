@@ -6,16 +6,18 @@ import {Request,Response} from 'express';
 export const createProduct = async(req:Request,res:Response)=>{
     try {
         const productData:IProduct = {
-            name: req.body,
+            name: req.body.name,
             user_id: req.params.id,
             url: req.body.url,
-            start_price: Number(req.body.start_price),
+            start_price: Number(req.body.price),
             desired_price: Number(req.body.desired_price) ?? 0,
-            prices: req.body.prices,
-            trackable: req.body.trackable,
+            prices: req.body.prices ?? [Number(req.body.price)],
+            description:req.body.description ?? "",
+            trackable: req.body.trackable ?? false,
+            photos : req.body.photos
         };
+        console.log(productData);
         const _product = await productService.createProduct(productData); 
-        return _product;
         return res.status(201).json({
             message : "SuccessFully created the Product",
             success: true,

@@ -21,7 +21,7 @@ model User{
 
 model Product{
         id              String @id @default(auto()) @map("_id") @db.ObjectId
-        user_id         String @unique @db.ObjectId
+        user_id         String @db.ObjectId
         name            String
         url             String
         photos          String[]

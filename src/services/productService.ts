@@ -12,11 +12,13 @@ class ProductService {
                         photos:productData.photos,
                         description:productData.description,
                         start_price:productData.start_price,
-                        desired_price:productData.desired_price,
                         prices:productData.prices,
-                        user_id:productData.user_id,
                         trackable:productData.trackable,
-                    }
+                        user: {
+                            connect: { id: productData.user_id },
+                          } as any, 
+                        desired_price  :(Number.isNaN(productData.desired_price))?0.0:productData.desired_price,
+                    },
                 });
                 return _product;
             } catch (error) {
