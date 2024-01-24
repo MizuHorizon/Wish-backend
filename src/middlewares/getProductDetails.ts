@@ -17,7 +17,10 @@ export const getProductDetails = async (req:Request,res:Response,next:any)=>{
          
       }
       if(organizationName.trim() ==="myntra"){
-             
+             const myntraData = await scrapper.getFromMyntra(url);
+             req.body.name = myntraData.name;
+             req.body.price = myntraData.price;
+             req.body.photos = myntraData.photo
       }
       next();
 }

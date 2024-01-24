@@ -63,13 +63,31 @@ class ScrapeProductDetails {
       // Navigate the page to a URL
       await page.goto(productUrl);
       await page.waitForTimeout(2000);
-      console.log(await page.content());
+    
+      const priceElement = await page.$('.pdp-price strong');
+      const priceText = await page.evaluate(element => element!.textContent, priceElement);
+      console.log("price", priceText);
+
+      const productName = await page.$eval(".pdp-name",(element)=>{
+         return element.textContent!.trim()
+      })
+
+      const photos = await page.$eval('.image-grid-image', divElement => divElement.getAttribute('style'));
+
+      // console.log('Style attribute value:', photos);
+     let price:number ;
+    if(priceText?.includes("₹")){
+      price = Number(priceText!.split("₹")[1].trim())
+    } else {
+        price = Number(priceText!.split(" ")[1].trim())
+    }
      
       const myntraData = {
-        name: "",
-        price: "",
-        photo: "",
+        name: productName,
+        price: price,
+        photo: [photos?.split('("')[1].split('")')[0]],
       };
+      console.log(myntraData);
       return myntraData;
     } catch (error) {
       console.log(error);
@@ -83,5 +101,5 @@ class ScrapeProductDetails {
 
 export default ScrapeProductDetails;
 
-const x = new ScrapeProductDetails();
-x.getFromMyntra("https://www.myntra.com/sweatshirts/h%26m/hm-men-loose-fit-round-neck-sweatshirts/26789752/buy");
+// const x = new ScrapeProductDetails();
+// x.getFromMyntra("https://www.myntra.com/shirts/the+bear+house/the-bear-house-men-black--white-slim-fit-checked-flannel-casual-shirt/12853658/buy");

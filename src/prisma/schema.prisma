@@ -28,7 +28,7 @@ model Product{
         description     String?
         start_price     Float
         trackable       Boolean
-        prices          String[]
+        prices          Float[]
         desired_price   Float
         created_at      DateTime @default(now()) 
         updated_at      DateTime @updatedAt
