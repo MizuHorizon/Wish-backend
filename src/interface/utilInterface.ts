@@ -10,6 +10,7 @@ export interface IUser {
 export interface IProduct{
     id?:string;
     name:string;
+    company:string;
     user_id:string;
     url:string;
     photos?:[];

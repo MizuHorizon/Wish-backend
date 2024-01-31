@@ -109,6 +109,55 @@ class ScrapeProductDetails {
     }
   }
 
+  async getFromAjio(productUrl:string){
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+
+    try {
+      const page = await browser.newPage();
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      );
+      // Navigate the page to a URL
+      await page.goto(productUrl);
+      await page.waitForTimeout(2000);
+
+      const priceElement = await page.$(".prod-sp");
+      const priceText = await page.evaluate(
+        (element) => element!.textContent,
+        priceElement
+      );
+      console.log("price", priceText);
+
+      const productName = await page.$eval(".prod-name", (element) => {
+        return element.textContent!.trim();
+      });
+      await page.waitForSelector('.rilrtl-lazy-img-loaded');
+      const photos = await page.$eval(".rilrtl-lazy-img-loaded", (divElement) =>
+        divElement.getAttribute("src")
+      );
+      // console.log('Style attribute value:', photos);
+      let price: number;
+      price = Number(priceText!.split("₹")[1].split(",").join(""));
+     console.log(price);
+      const AjioData = {
+        name: productName,
+        price: price,
+        photo: [photos],
+      };
+      console.log(AjioData);
+      return AjioData;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      //await page.waitForTimeout(2000);
+      await browser.close();
+    }
+  }
+
   async getFromMyntra(productUrl: string) {
     const browser = await puppeteer.launch({
       headless: true,
@@ -167,6 +216,6 @@ class ScrapeProductDetails {
 export default ScrapeProductDetails;
 
 // const x = new ScrapeProductDetails();
-// x.getFromFlipkart(
-//   "https://www.flipkart.com/acer-21-5-inch-full-hd-va-panel-vga-hdmi-ergonomic-stand-2x2w-inbuilt-speakers-zeroframe-design-monitor-ka222q/p/itm872b3d8972419?pid=MONGHQS4GZ3AWGBV&lid=LSTMONGHQS4GZ3AWGBV1DB2OF&marketplace=FLIPKART&store=6bo%2Fg0i%2F9no&srno=b_1_1&otracker=browse&otracker1=hp_rich_navigation_PINNED_neo%2Fmerchandising_NA_NAV_EXPANDABLE_navigationCard_cc_3_L2_view-all&fm=organic&iid=en_b0bs_dD_2KjXA3hTdiX5d7zpJz74uBfCXYYOn7KZixhKagMTukg-e370-YYWIWKAtugS3mw2zXXDfJ5VHRl0DPUFjCTyOHoHZs-Z5_PS_w0%3D&ppt=hp&ppn=homepage&ssid=tzpbo4r8yo0000001706112440469"
+// x.getFromAjio(
+//   "https://www.ajio.com/avaasa-mix-n-match-embellished-dupatta-with-tassels/p/443016925_gold"
 // );

@@ -13,6 +13,7 @@ class ProductService {
                         description:productData.description,
                         start_price:productData.start_price,
                         prices:productData.prices,
+                        company:productData.company,
                         trackable:productData.trackable,
                         user: {
                             connect: { id: productData.user_id },
@@ -86,6 +87,15 @@ class ProductService {
                     }
                 })
                 return _product;
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+        }
+        async getAllProduct(){
+            try {
+                const products = await product.findMany();
+                return products;
             } catch (error) {
                 console.log(error);
                 throw error;

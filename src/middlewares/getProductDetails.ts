@@ -11,6 +11,7 @@ export const getProductDetails = async (
   const url = req.body.url.toString();
   const match = url.match(/https?:\/\/(?:www\.)?([a-zA-Z0-9-]+)\.[a-zA-Z]+/);
   const organizationName = match ? match[1] : null;
+  req.body.company = organizationName;
   if (organizationName.trim() === "amazon") {
     const amazonData = await scrapper.getFromAmazon(url);
     req.body.name = amazonData.name;
@@ -26,7 +27,9 @@ export const getProductDetails = async (
     req.body.name = flipkartData.name;
     req.body.price = flipkartData.price;
     req.body.photos = flipkartData.photo;
-  } else {
+  } else if(organizationName.trim()==="ajio"){
+
+  }else {
     return res.status(404).json({
       message: "Company not supported!",
       success: false,

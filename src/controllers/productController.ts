@@ -9,6 +9,7 @@ export const createProduct = async(req:Request,res:Response)=>{
             name: req.body.name,
             user_id: req.params.id,
             url: req.body.url,
+            company : req.body.company,
             start_price: Number(req.body.price),
             desired_price: Number(req.body.desired_price) ?? 0,
             prices: req.body.prices ?? [Number(req.body.price)],

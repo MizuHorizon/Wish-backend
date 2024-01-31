@@ -24,6 +24,7 @@ model Product{
         user_id         String @db.ObjectId
         name            String
         url             String
+        company         String
         photos          String[]
         description     String?
         start_price     Float
