@@ -94,8 +94,25 @@ class ProductService {
         }
         async getAllProduct(){
             try {
-                const products = await product.findMany();
-                return products;
+                const _products = await product.findMany();
+                return _products;
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+        }
+
+        async updateProductPrice(productId:string,prices : number[]){
+            try {
+                const _product = await product.update({
+                    where : {
+                        id : productId
+                    },
+                    data : {
+                        prices : prices
+                    }
+                });
+                return _product;
             } catch (error) {
                 console.log(error);
                 throw error;

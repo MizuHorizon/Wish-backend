@@ -14,7 +14,7 @@ export const createProduct = async(req:Request,res:Response)=>{
             desired_price: Number(req.body.desired_price) ?? 0,
             prices: req.body.prices ?? [Number(req.body.price)],
             description:req.body.description ?? "",
-            trackable: req.body.trackable ?? false,
+            trackable: Boolean(req.body.trackable) ?? false,
             photos : req.body.photos
         };
         console.log(productData);

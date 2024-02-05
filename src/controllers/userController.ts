@@ -3,13 +3,71 @@ import UserService from "../services/userServices";
 const userService = new UserService();
 import {Request,Response} from 'express';
 
+export const googleSignIn = async(req:Request,res:Response)=>{
+    try{
+        const userData:IUser = {
+            name: req.body.name,
+            email: req.body.email,
+            profile_pic: req.body.photo,
+            password: "",
+            email_token: null,
+            is_verified: true,
+            username: req.body.email.split("@")[0]
+        };
+
+        const response = await userService.googleSignIn(userData);
+
+        return res.status(201).json({
+            message: "Successfully Signed In",
+            data: response,
+            err: {},
+            success: true,
+          });
+
+
+    }catch(error){
+        console.log(error);
+        return res.status(501).json({
+            message : "Something went wrong while google singing the user",
+            success : false,
+            err : error ,
+            data : ""
+        });
+    }
+}
+
+export const signIn = async(req:Request,res:Response) => {
+    try {
+        const response = await userService.signIn(
+            req.body.email,
+            req.body.password
+          );
+          return res.status(201).json({
+            message: "Successfully Signed In",
+            data: response,
+            err: {},
+            success: true,
+          });
+    } catch (error) {
+        console.log(error);
+        return res.status(501).json({
+            message : "Something went wrong while singing the user",
+            success : false,
+            err : error ,
+            data : ""
+        });
+    }
+}
 export const createUser = async(req:Request,res:Response)=>{
     try {
         const userData:IUser ={
             username: req.body.email.toString().split("@")[0],
             name: req.body.name,
             email: req.body.email,
-            profile_pic: req.body.profile_pic
+            profile_pic: req.body.profile_pic ?? "",
+            password:req.body.password,
+            email_token: null,
+            is_verified: false
         };
         const user = await userService.createUser(userData);
         return res.status(201).json({

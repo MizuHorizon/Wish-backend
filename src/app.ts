@@ -12,7 +12,7 @@ import cors from "cors";
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use("/api", apiRoutes);
   
-  job.start();
+  // job.start();
 
   app.listen(env.PORT, () => {
     console.log(`Server Started On Port ${env.PORT}`);

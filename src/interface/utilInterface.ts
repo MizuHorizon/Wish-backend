@@ -2,6 +2,9 @@ export interface IUser {
     id? : string;
     name : string;
     email : string;
+    password : string;
+    email_token :string | null;
+    is_verified : boolean;
     username: string;
     profile_pic:string;
     products?:[]
