@@ -8,13 +8,13 @@ export const googleSignIn = async(req:Request,res:Response)=>{
         const userData:IUser = {
             name: req.body.name,
             email: req.body.email,
-            profile_pic: req.body.photo,
-            password: "",
+            profile_pic: req.body.profile_pic,
+            password: "null",
             email_token: null,
             is_verified: true,
-            username: req.body.email.split("@")[0]
+            username: req.body.email.split("@")[0],
         };
-
+        console.log(userData);
         const response = await userService.googleSignIn(userData);
 
         return res.status(201).json({

@@ -22,7 +22,7 @@ class UserService {
           username: userData.username,
           email: userData.email,
           name: userData.name,
-          profile_pic: userData.profile_pic,
+          profile_pic: userData.profile_pic ?? "https://i.pinimg.com/originals/55/32/f3/5532f32f514cdfc36e80a5408922383e.png",
         },
       });
       return _user;
