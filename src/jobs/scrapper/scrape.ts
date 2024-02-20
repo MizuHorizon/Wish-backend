@@ -7,12 +7,18 @@ class ScrapeProductDetails {
     try {
       const page = await browser.newPage();
       await page.setUserAgent(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        "AppleWebKit/537.36 (KHTML, like Gecko) Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124 Safari/537.36"
       );
+      await page.setViewport({ width: 1280, height: 800 });
       // Navigate the page to a URL
-      await page.goto(productUrl);
-      await page.waitForTimeout(2000);
+      await page.goto(productUrl, { timeout: 60000 });
+        await page.waitForTimeout(4000); // Increase waiting time to 4 seconds
+
+        await page.waitForSelector('.a-price-whole', { timeout: 30000 });
       let price = await page.$eval(".a-price-whole", (element) => {
+        return element!.textContent!.trim();
+      });
+      let symbol = await page.$eval(".a-price-symbol", (element) => {
         return element!.textContent!.trim();
       });
       price = price.replace(/,/g, "");
@@ -25,6 +31,7 @@ class ScrapeProductDetails {
       console.log("Product Title:", productTitle);
       await page.waitForTimeout(2000);
 
+    
       await page.waitForSelector("#imgTagWrapperId img.a-dynamic-image");
       const imageLinks = await page.$$eval(
         "#imgTagWrapperId img.a-dynamic-image",
@@ -40,6 +47,7 @@ class ScrapeProductDetails {
         name: productTitle,
         price: price,
         photo: imageLinks,
+        currencySymbol : symbol
       };
       return amazonData;
     } catch (error) {
@@ -72,7 +80,7 @@ class ScrapeProductDetails {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
       );
       // Navigate the page to a URL
-      await page.goto(productUrl);
+      await page.goto(productUrl, { timeout: 60000 });
       await page.waitForTimeout(2000);
       await page.waitForSelector(".B_NuCI");
 
@@ -97,6 +105,7 @@ class ScrapeProductDetails {
         name: productName,
         price: this.#extractPrice(productPrice),
         photo: [productPhoto],
+        currencySymbol : "₹"
       };
       console.log(flipkartData);
       return flipkartData;
@@ -121,7 +130,7 @@ class ScrapeProductDetails {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
       );
       // Navigate the page to a URL
-      await page.goto(productUrl);
+      await page.goto(productUrl, { timeout: 60000 });
       await page.waitForTimeout(2000);
 
       const priceElement = await page.$(".prod-sp");
@@ -146,6 +155,7 @@ class ScrapeProductDetails {
         name: productName,
         price: price,
         photo: [photos],
+        currencySymbol : "₹"
       };
       console.log(AjioData);
       return AjioData;
@@ -170,7 +180,7 @@ class ScrapeProductDetails {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
       );
       // Navigate the page to a URL
-      await page.goto(productUrl);
+      await page.goto(productUrl, { timeout: 60000 });
       await page.waitForTimeout(2000);
 
       const priceElement = await page.$(".pdp-price strong");
@@ -200,6 +210,7 @@ class ScrapeProductDetails {
         name: productName,
         price: price,
         photo: [photos?.split('("')[1].split('")')[0]],
+        currencySymbol : "₹"
       };
       console.log(myntraData);
       return myntraData;

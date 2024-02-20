@@ -15,7 +15,9 @@ export interface IProduct{
     name:string;
     company:string;
     user_id:string;
+    currencySymbol:string;
     url:string;
+    tags : [];
     photos?:[];
     description?:string;
     start_price:number;

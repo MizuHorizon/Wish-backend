@@ -15,6 +15,8 @@ class ProductService {
                         prices:productData.prices,
                         company:productData.company,
                         trackable:productData.trackable,
+                        tags : productData.tags,
+                        currency:productData.currencySymbol,
                         user: {
                             connect: { id: productData.user_id },
                           } as any, 
