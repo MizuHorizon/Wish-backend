@@ -43,11 +43,12 @@ class ProductService {
         }
         async getProductbyIdOfUser(user_id:string){
             try {
-                const _products = await product.findUnique({
+                const _products = await product.findMany({
                     where : {
-                        id :user_id
+                        user_id :user_id
                     }
                 });
+                console.log(_products);
                 return _products;
             } catch (error) {
                 console.log(error);

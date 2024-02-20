@@ -29,6 +29,8 @@ model Product{
         url             String
         company         String
         photos          String[]
+        tags            String[]
+        currency        String?
         description     String?
         start_price     Float
         trackable       Boolean

@@ -101,6 +101,20 @@ class UserService {
     }
   }
 
+  async getByEmail(email : string){
+    try {
+        const _user = await user.findUnique({
+          where : {
+            email : email
+          }
+        });
+        return _user;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
   async signIn(email: string, plainPassword: string) {
     try {
       const _user = await user.findUnique({
@@ -108,7 +122,6 @@ class UserService {
           email: email,
         },
       });
-
       const encryptedPassword = _user?.password as string;
       console.log(_user);
       const passwordMatch = this.checkPassword(

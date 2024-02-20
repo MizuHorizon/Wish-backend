@@ -57,6 +57,7 @@ export const getProductbyId = async(req:Request,res:Response)=>{
 export const getProductbyIdOfUser = async(req:Request,res:Response)=>{
     try {
         const userId:string = req.query.id as string;
+        console.log(userId);
         const _product = await productService.getProductbyIdOfUser(userId);
         return res.status(201).json({
             message : "SuccessFully fetched the Product",
