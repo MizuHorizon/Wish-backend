@@ -14,7 +14,7 @@ export const createProduct = async(req:Request,res:Response)=>{
             company : req.body.company,
             start_price: Number(req.body.price),
             desired_price: Number(req.body.desired_price) ?? 0,
-            prices: req.body.prices ?? [Number(req.body.price)],
+            prices: req.body.prices ?? [JSON.stringify({price:Number(100),date:new Date()})],
             description:req.body.description ?? "",
             trackable: Boolean(req.body.trackable) ?? false,
             photos : req.body.photos
@@ -99,7 +99,10 @@ export const updatePriceOfProduct = async(req:Request,res:Response)=>{
     try {
         const price = req.body.price;
         const productId = req.params.id
-        const _product = await productService.updatePriceOfProduct(productId,price);
+        const priceWithTime = {
+            price,date:new Date()
+        }
+        const _product = await productService.updatePriceOfProduct(productId,priceWithTime);
         return res.status(201).json({
             message : "SuccessFully created the Product",
             success: true,

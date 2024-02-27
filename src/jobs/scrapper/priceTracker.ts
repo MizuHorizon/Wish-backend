@@ -10,7 +10,7 @@ class PriceTracker {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
       );
       // Navigate the page to a URL
-      await page.goto(url);
+      await page.goto(url, { timeout: 60000 });
       await page.waitForTimeout(2000);
       let price = await page.$eval(".a-price-whole", (element) => {
         return element!.textContent!.trim();
@@ -46,7 +46,7 @@ class PriceTracker {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         );
         // Navigate the page to a URL
-        await page.goto(url);
+        await page.goto(url, { timeout: 60000 });
         await page.waitForTimeout(2000);
         await page.waitForSelector("._30jeq3._16Jk6d");
         const productPrice = await page.$eval("._30jeq3._16Jk6d", (element) => {
@@ -74,7 +74,7 @@ class PriceTracker {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         );
         // Navigate the page to a URL
-        await page.goto(url);
+        await page.goto(url, { timeout: 60000 });
         await page.waitForTimeout(2000);
   
         const priceElement = await page.$(".pdp-price strong");
@@ -113,7 +113,7 @@ class PriceTracker {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         );
         // Navigate the page to a URL
-        await page.goto(url);
+        await page.goto(url, { timeout: 60000 });
         await page.waitForTimeout(2000);
   
         const priceElement = await page.$(".prod-sp");

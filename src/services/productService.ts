@@ -105,7 +105,7 @@ class ProductService {
             }
         }
 
-        async updateProductPrice(productId:string,prices : number[]){
+        async updateProductPrice(productId:string,prices : string[]){
             try {
                 const _product = await product.update({
                     where : {

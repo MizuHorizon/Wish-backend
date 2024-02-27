@@ -10,7 +10,7 @@ export const job = new CronJob('*/5 * * * *', async function() {
     const products = await productService.getAllProduct();
     // console.log(products);
     products.forEach(async (product)=>{
-          if(product.trackable){
+          if(product.trackable == true){
                 let priceArray = product.prices;
                     if(product.company === "amazon"){
                         const price:number = await tracker.getFromAmazon(product.url);
