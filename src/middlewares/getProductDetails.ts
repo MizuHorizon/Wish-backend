@@ -1,64 +1,76 @@
-import { Request, Response } from "express";
+
 import ScrapeProductDetails from "../jobs/scrapper/scrape";
+import { IScrapredProduct } from "../interface/utilInterface";
 
 const scrapper = new ScrapeProductDetails();
 
 export const getProductDetails = async (
-  req: Request,
-  res: Response,
-  next: any
+ url : string,
+ productTags : Array<string>|undefined
 ) => {
-  const url = req.body.url.toString();
+
+
   const match = url.match(/https?:\/\/(?:www\.)?([a-zA-Z0-9-]+)\.[a-zA-Z]+/);
-  const organizationName = match ? match[1] : null;
+  const organizationName = (match ? match[1] : null) as string ;
   
-  if(!req.body.tags){
-    req.body.tags = [];
+  if(!productTags){
+     productTags = [];
   }
 
-  if(!Array.isArray(req.body.tags) && req.body.tags){
-      let tag = req.body.tags;
-      req.body.tags = [];
-      req.body.tags.push(tag);
+  if(!Array.isArray(productTags) && productTags){
+      let tag = productTags;
+      productTags = [];
+      productTags.push(tag);
   }
-
+  let scrapeProd :IScrapredProduct = {
+    name:"",
+    price :"",
+    photos : "",
+    currencySymbol:"",
+    tags:[],
+    org:""
+  };
 
   console.log(organizationName);
-  req.body.company = organizationName;
+  scrapeProd.org = organizationName as string;
+
+  try{
   if (organizationName.trim() === "amazon") {
     const amazonData = await scrapper.getFromAmazon(url);
-    req.body.name = amazonData.name;
-    req.body.price = amazonData.price;
-    req.body.photos = amazonData.photo;
-    req.body.currencySymbol = amazonData.currencySymbol;
-    req.body.tags.push("amazon");
+    scrapeProd.name = amazonData.name;
+    scrapeProd.price = amazonData.price;
+    scrapeProd.photos = amazonData.photo as [] ;
+    scrapeProd.currencySymbol = amazonData.currencySymbol;
+    productTags.push("amazon");
+
     
   } else if (organizationName.trim() === "myntra") {
     const myntraData = await scrapper.getFromMyntra(url);
-    req.body.name = myntraData.name;
-    req.body.price = myntraData.price;
-    req.body.photos = myntraData.photo;
-    req.body.currencySymbol = myntraData.currencySymbol;
-    req.body.tags.push("myntra");
+    scrapeProd.name = myntraData.name;
+    scrapeProd.price = myntraData.price;
+    scrapeProd.photos = myntraData.photo as [];
+    scrapeProd.currencySymbol = myntraData.currencySymbol;
+    productTags.push("myntra");
   } else if (organizationName.trim() === "flipkart") {
     const flipkartData = await scrapper.getFromFlipkart(url);
-    req.body.name = flipkartData.name;
-    req.body.price = flipkartData.price;
-    req.body.photos = flipkartData.photo;
-    req.body.currencySymbol = flipkartData.currencySymbol;
-    req.body.tags.push("flipkart");
+    scrapeProd.name = flipkartData.name;
+    scrapeProd.price = flipkartData.price;
+    scrapeProd.photos = flipkartData.photo as [];
+    scrapeProd.currencySymbol = flipkartData.currencySymbol;
+    productTags.push("flipkart");
   } else if(organizationName.trim()==="ajio"){
       const ajioData = await scrapper.getFromAjio(url);
-      req.body.name = ajioData.name;
-      req.body.price = ajioData.price;
-      req.body.photos = ajioData.photo;
-      req.body.currencySymbol = ajioData.currencySymbol;
-      req.body.tags.push("ajio");
-  }else {
-    return res.status(404).json({
-      message: "Company not supported!",
-      success: false,
-    });
+      scrapeProd.name = ajioData.name;
+      scrapeProd.price = ajioData.price;
+      scrapeProd.photos = ajioData.photo as [];
+      scrapeProd.currencySymbol = ajioData.currencySymbol;
+      productTags.push("ajio");
   }
-  next();
+  scrapeProd.tags = productTags as [];
+  return scrapeProd;
+
+} catch(error){
+  console.log(error);
+  throw error;
+}
 };

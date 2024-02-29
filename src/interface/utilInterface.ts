@@ -22,8 +22,18 @@ export interface IProduct{
     description?:string;
     start_price:number;
     desired_price:number;
-    prices:[];
+    prices?:[] | [string];
     trackable:boolean;
     created_at?:Date;
     updated_at?:Date;
+}
+
+export interface IScrapredProduct {
+    name:string,
+    price :string|number,
+    photos : string | null|[],
+    currencySymbol:string,
+    tags:[],
+    org:string,
+    prices? : [] | [string];
 }
