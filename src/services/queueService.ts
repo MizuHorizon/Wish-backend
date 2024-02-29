@@ -43,14 +43,14 @@ export const subscribeMessage = async (
       const productData: IProduct = {
         name: scrapeProd.name,
         user_id: data.user_id,
-        url: data.url,
+        url: data.url??" ",
         tags: scrapeProd.tags,
         currencySymbol: scrapeProd.currencySymbol,
         company: scrapeProd.org,
         start_price: Number(scrapeProd.price),
         desired_price: Number(data.desired_price) ?? 0,
         prices: scrapeProd.prices?? [
-          JSON.stringify({ price: Number(100), date: new Date() }),
+          JSON.stringify({ price: Number(scrapeProd.price), date: new Date() }),
         ],
         description: data.description ?? "",
         trackable: Boolean(data.trackable) ?? false,

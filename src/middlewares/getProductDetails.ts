@@ -8,7 +8,8 @@ export const getProductDetails = async (
  url : string,
  productTags : Array<string>|undefined
 ) => {
-
+   
+ // console.log(url="https://www.myntra.com/kurta-sets/w/w-geometric-print-cotton-blend-kurta-with-tight--dupatta/21018822/buy");
 
   const match = url.match(/https?:\/\/(?:www\.)?([a-zA-Z0-9-]+)\.[a-zA-Z]+/);
   const organizationName = (match ? match[1] : null) as string ;

@@ -51,6 +51,7 @@ export const processProductRequest = async (req: Request, res: Response) => {
       user_id,
       ...req.body,
     };
+    console.log(productData);
 
     await publishMessage(channel, env.BINDING_KEY, productData);
     return res.status(200).json({
