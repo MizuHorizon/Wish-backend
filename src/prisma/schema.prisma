@@ -18,6 +18,7 @@ model User{
         password        String
         email_token     String?
         is_verified     Boolean
+        fcm_token       String?
         username        String @unique
         products        Product[] 
 }

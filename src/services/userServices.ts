@@ -50,6 +50,23 @@ class UserService {
     }
   }
 
+  async updateFcmToken(userId:string,token : string){
+     try {
+      const _user = await user.update({
+        where :{
+          id : userId
+        },
+        data : {
+          fcm_token : token
+        }    
+      });
+      return _user;
+     } catch (error) {
+      console.log("Something went wrong in the service while updating the user");
+      throw error;
+     }
+  }
+
   async googleSignIn(userData: IUser) {
     try {
       const email: string = userData.email;

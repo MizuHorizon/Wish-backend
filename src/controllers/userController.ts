@@ -36,6 +36,31 @@ export const googleSignIn = async(req:Request,res:Response)=>{
     }
 }
 
+export const updateFcmToken = async(req:Request,res:Response)=>{
+    try {
+
+        const userId:string = req.params.id;
+        const token:string = req.body.fcmtoken;
+        const _user = await userService.updateFcmToken(userId,token);
+
+          return res.status(200).json({
+            message: "Successfully Updated Token",
+            data: _user,
+            err: {},
+            success: true,
+          });
+    } catch (error) {
+        console.log(error);
+        return res.status(501).json({
+            message : "Something went wrong while updating the user",
+            success : false,
+            err : error ,
+            data : ""
+        });
+    }  
+    
+}
+
 export const signIn = async(req:Request,res:Response) => {
     try {
         const response = await userService.signIn(
@@ -91,8 +116,8 @@ export const getById =async (req:Request,res:Response) => {
         const userId:string = req.params.id;
         const user =await userService.getUserById(userId
             );
-            return res.status(201).json({
-                message : "Successfully created the user!",
+            return res.status(200).json({
+                message : "Successfully fetched the user!",
                 success : false,
                 err : "",
                 data : user
