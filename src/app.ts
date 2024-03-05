@@ -6,6 +6,7 @@ import apiRoutes from "./routes/index";
 import {job} from "./jobs/cron/fetchPriceCron";
 import cors from "cors";
 import {createChannel,subscribeMessage} from "./services/queueService";
+import { sendNotification } from "./services/firebaseNotificationService";
 
 (async () => {
   app.use(bodyParser.json());
@@ -17,6 +18,8 @@ import {createChannel,subscribeMessage} from "./services/queueService";
   await subscribeMessage(channel,env.BINDING_KEY);
 
  job.start();
+ sendNotification();
+
 
   app.listen(env.PORT, () => {
     console.log(`Server Started On Port ${env.PORT}`);
