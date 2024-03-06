@@ -5,8 +5,9 @@ import bodyParser from "body-parser";
 import apiRoutes from "./routes/index";
 import {job} from "./jobs/cron/fetchPriceCron";
 import cors from "cors";
+import { EventEmitter } from 'events';
 import {createChannel,subscribeMessageForCreatingProduct,subscribeMessageForNotifications} from "./services/queueService";
-
+EventEmitter.defaultMaxListeners = 16;
 
 (async () => {
   app.use(bodyParser.json());

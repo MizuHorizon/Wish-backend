@@ -30,6 +30,24 @@ class ProductService {
             }
         }
 
+        async enableProductTracker(productId:string){
+            try {
+
+                const _product = await product.update({
+                    where : {
+                        id : productId
+                    },
+                    data : {
+                        trackable : true
+                    }
+                });
+                return _product;
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+        }
+
         async disableProductTracker(productId:string){
             try {
 

@@ -93,6 +93,29 @@ export const disableProductTracker = async(req:Request,res:Response)=>{
     });
   }
 }
+export const enableProductTracker = async(req:Request,res:Response)=>{
+  try {
+
+    const productId:string = req.params.id;
+    const _product = await productService.enableProductTracker(productId);
+    return res.status(200).json({
+      message: "SuccessFully disabled product tracker!!!",
+      success: true,
+      err: "",
+      data: _product,
+    });
+    
+    
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong!",
+      success: false,
+      err: error,
+      data: "",
+    });
+  }
+}
 
 export const getProductbyId = async (req: Request, res: Response) => {
   try {
