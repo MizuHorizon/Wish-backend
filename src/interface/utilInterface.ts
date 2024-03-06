@@ -7,6 +7,7 @@ export interface IUser {
     is_verified : boolean;
     username: string;
     profile_pic:string;
+    fcm_token?:string|null;
     products?:[]
 }
 

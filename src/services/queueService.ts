@@ -4,6 +4,7 @@ import ProductService from "./productService";
 const productService = new ProductService();
 import {getProductDetails} from "../middlewares/getProductDetails";
 import { IProduct, IScrapredProduct } from "../interface/utilInterface";
+import {sendNotification} from "../services/firebaseNotificationService";
 
 
 
@@ -27,8 +28,11 @@ export const subscribeMessageForNotifications = async(channel:amqplib.Channel,bi
       channel.consume(serviceQueue.queue,async(message:any)=>{
         console.log("Notification received:", message.content.toString());
         //logic to for notifications....................................
-        
 
+        const notificationData = JSON.parse(message.content);
+        console.log(notificationData);
+        
+        await sendNotification(notificationData.fcm_token,notificationData.payload);
 
 
         channel.ack(message);

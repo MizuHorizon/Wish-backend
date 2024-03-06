@@ -8,6 +8,7 @@ import {
   getTrackableProductbyIdOfUser,
   updatePriceOfProduct,
   deleteProduct,
+  disableProductTracker,
   processProductRequest,
 } from "../../controllers/productController";
 
@@ -20,6 +21,7 @@ app.get("/:id", getProductbyId);
 app.get("/", getProductbyIdOfUser);
 app.get("/track", getTrackableProductbyIdOfUser);
 app.patch("/:id", updatePriceOfProduct);
+app.patch("/disable/:id",disableProductTracker);
 app.delete("/:id", deleteProduct);
 
 export default app;
