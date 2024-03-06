@@ -5,7 +5,7 @@ import {checkForExistingAccount,checkForNonExistingAccount} from "../../middlewa
 
 app.post("/",checkForExistingAccount,createUser);
 app.post("/signin",checkForNonExistingAccount,signIn);
-app.post("/:id",updateFcmToken);
+app.post("/updatefcm/:userid",updateFcmToken);
 app.get("/:id",getById);
 app.get("/",getByuserName);
 app.post("/google",googleSignIn);

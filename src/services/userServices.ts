@@ -52,6 +52,7 @@ class UserService {
 
   async updateFcmToken(userId:string,token : string){
      try {
+      console.log(userId,token);
       const _user = await user.update({
         where :{
           id : userId
@@ -62,7 +63,7 @@ class UserService {
       });
       return _user;
      } catch (error) {
-      console.log("Something went wrong in the service while updating the user");
+     // console.log("Something went wrong in the service while updating the user");
       throw error;
      }
   }
@@ -70,14 +71,18 @@ class UserService {
   async googleSignIn(userData: IUser) {
     try {
       const email: string = userData.email;
+      console.log(email);
       const _user = await user.findUnique({
         where: {
           email: email,
         },
       });
 
+      
+      console.log(_user);
       if (!_user) {
         let _newUser = await this.createUser(userData);
+        console.log(_newUser);
         const newJWTtoken = this.createToken({
           userId: _newUser?.id,
           username: _newUser?.username,
@@ -172,7 +177,7 @@ class UserService {
     }
   }
 
-  async getUserById(userId: string): Promise<IUser | null> {
+  async getUserById(userId: string) {
     try {
       const _user: IUser | null = await user.findUnique({
         where: {
@@ -181,7 +186,7 @@ class UserService {
       });
       return _user;
     } catch (error) {
-      console.log(error);
+     // console.log(error);
       throw error;
     }
   }
