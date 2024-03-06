@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import apiRoutes from "./routes/index";
 import {job} from "./jobs/cron/fetchPriceCron";
 import cors from "cors";
-import {createChannel,subscribeMessage} from "./services/queueService";
+import {createChannel,subscribeMessageForCreatingProduct,subscribeMessageForNotifications} from "./services/queueService";
 
 
 (async () => {
@@ -14,11 +14,14 @@ import {createChannel,subscribeMessage} from "./services/queueService";
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use("/api", apiRoutes);
   
+  
+
   const channel = await createChannel();
-  await subscribeMessage(channel,env.BINDING_KEY);
+  await subscribeMessageForCreatingProduct(channel,env.BINDING_KEY);
+  await subscribeMessageForNotifications(channel,env.NOTIFICATION_BINDING_KEY);
 
  job.start();
-
+ 
   app.listen(env.PORT, () => {
     console.log(`Server Started On Port ${env.PORT}`);
   });

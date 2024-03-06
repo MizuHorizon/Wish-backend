@@ -19,11 +19,32 @@ export const createChannel = async () => {
   }
 };
 
-export const subscribeMessage = async (
+export const subscribeMessageForNotifications = async(channel:amqplib.Channel,binding_key:any)=>{
+   try {
+      const serviceQueue = await channel.assertQueue(env.QUEUE_NAME2 as string);
+
+      channel.bindQueue(serviceQueue.queue,env.EXCHANGE_NAME as string,binding_key);
+      channel.consume(serviceQueue.queue,async(message:any)=>{
+        console.log("Notification received:", message.content.toString());
+        //logic to for notifications....................................
+        
+
+
+
+        channel.ack(message);
+      });
+   } catch (error) {
+     console.log(error);
+   }
+}
+
+export const subscribeMessageForCreatingProduct = async (
   channel: amqplib.Channel,
   binding_key: any
 ) => {
   try {
+
+
     const serviceQueue = await channel.assertQueue(env.QUEUE_NAME as string);
     channel.bindQueue(
       serviceQueue.queue,

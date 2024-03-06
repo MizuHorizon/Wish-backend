@@ -2,7 +2,12 @@ import { CronJob } from "cron";
 import ProductService from "../../services/productService";
 const productService = new ProductService();
 import PriceTracker from "../../jobs/scrapper/priceTracker";
+import { createChannel, publishMessage } from "../../services/queueService";
+import env from "../../config/serverConfig";
 const tracker = new PriceTracker();
+
+
+
 export const job = new CronJob("0 * * * *", async function () {
   // Your task to be executed every minute goes here
   console.log("Running a task every hour!");
@@ -13,17 +18,20 @@ export const job = new CronJob("0 * * * *", async function () {
     products.forEach(async (product) => {
       if (product.trackable == true) {
         let priceArray = product.prices;
+        let price:number = -1;
         if (product.company === "amazon") {
+          
           try {
-            const price: number = await tracker.getFromAmazon(product.url);
+            price = await tracker.getFromAmazon(product.url);
             priceArray.push(JSON.stringify({ price: price, date: new Date() }));
+           
           } catch (error) {
             console.log(error);
           }
         }
         if (product.company === "ajio") {
           try {
-            const price: number = await tracker.getFromAjio(product.url);
+            price = await tracker.getFromAjio(product.url);
             priceArray.push(JSON.stringify({ price: price, date: new Date() }));
           } catch (error) {
             console.log(error);
@@ -31,7 +39,7 @@ export const job = new CronJob("0 * * * *", async function () {
         }
         if (product.company === "flipkart") {
           try {
-            const price: number = await tracker.getFromFlipKart(product.url);
+            price = await tracker.getFromFlipKart(product.url);
             priceArray.push(JSON.stringify({ price: price, date: new Date() }));
           } catch (error) {
             console.log(error);
@@ -39,12 +47,15 @@ export const job = new CronJob("0 * * * *", async function () {
         }
         if (product.company === "myntra") {
           try {
-            const price: number = await tracker.getFromMyntra(product.url);
+            price = await tracker.getFromMyntra(product.url);
             priceArray.push(JSON.stringify({ price: price, date: new Date() }));
           } catch (error) {
             console.log(error);
           }
         }
+        console.log(price);
+        //send it to the queue to send notifications
+        
 
         //updating the price of the product
         const update = await productService.updatePriceOfProduct(
