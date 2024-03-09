@@ -70,6 +70,32 @@ export const processProductRequest = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const changeDesiredPrice= async(req:Request,res:Response)=>{
+  try {
+    
+    const productId:string = req.params.id;
+    const desired_price:number = Number(req.body.desired_price);
+    const _product = await productService.changeDesiredPrice(productId,desired_price);
+
+    return res.status(200).json({
+      message: "SuccessFully updated the price!!!",
+      success: true,
+      err: "",
+      data: _product,
+    });
+    
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong!",
+      success: false,
+      err: error,
+      data: "",
+    });
+  }
+}
 export const disableProductTracker = async(req:Request,res:Response)=>{
   try {
 

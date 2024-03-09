@@ -11,6 +11,7 @@ import {
   disableProductTracker,
   enableProductTracker,
   processProductRequest,
+  changeDesiredPrice
 } from "../../controllers/productController";
 
 import {getProductDetails} from "../../middlewares/getProductDetails";
@@ -24,6 +25,7 @@ app.get("/track", getTrackableProductbyIdOfUser);
 app.patch("/:id", updatePriceOfProduct);
 app.patch("/disable/:id",disableProductTracker);
 app.patch("/enable/:id",enableProductTracker);
+app.patch("/price/:id",changeDesiredPrice);
 app.delete("/:id", deleteProduct);
 
 export default app;

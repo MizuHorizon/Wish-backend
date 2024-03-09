@@ -29,6 +29,23 @@ class ProductService {
                 throw error;
             }
         }
+        async changeDesiredPrice(productId:string,desired_price:number){
+         try {
+            const _product = await product.update({
+                where :{
+                    id : productId
+                },
+                data : {
+                    desired_price:desired_price
+                }
+            });
+            return _product;
+            
+         } catch (error) {
+            console.log(error);
+            throw error;
+         }
+        }
 
         async enableProductTracker(productId:string){
             try {
