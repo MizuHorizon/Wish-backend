@@ -1,6 +1,6 @@
 import { IUser } from "../interface/utilInterface";
 import prisma from "../prisma/index";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import env from "../config/serverConfig";
 import randomBytes from "randombytes";
 import jwt from "jsonwebtoken";

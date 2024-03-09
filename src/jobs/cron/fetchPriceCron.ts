@@ -6,6 +6,7 @@ import PriceTracker from "../../jobs/scrapper/priceTracker";
 import { createChannel, publishMessage } from "../../services/queueService";
 import env from "../../config/serverConfig";
 import UserService from "../../services/userServices";
+import { IProduct } from "../../interface/utilInterface";
 
 const productService = new ProductService();
 const userService = new UserService();
@@ -22,15 +23,18 @@ export const job = new CronJob("0 * * * *", async function () {
   console.log("Running a task every hour!");
 
   const products = await productService.getAllProduct();
-  // console.log(products);
+
   try {
     products.forEach(async (product) => {
+      console.log(`12 ${product.company} . ${product.trackable}`);
       if (product.trackable == true) {
         let priceArray = product.prices;
         let price: number = -1;
+        
         if (product.company === "amazon") {
           try {
             price = await tracker.getFromAmazon(product.url);
+            console.log(price);
             priceArray.push(JSON.stringify({ price: price, date: new Date() }));
           } catch (error) {
             console.log(error);

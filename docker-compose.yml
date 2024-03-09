@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+   nodejs:
+      image: "wish-container"
+      ports:
+        - 4000:4000
+      networks:
+        - my-network
+      depends_on:
+        - rabbitmq
+   
+   rabbitmq:
+        image: "rabbitmq:latest"
+        ports:
+          - 5672:5672
+        networks:
+            - my-network
+networks:
+  my-network:
+        driver: host
+
+  
