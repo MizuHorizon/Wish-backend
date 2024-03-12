@@ -39,6 +39,7 @@ class ProductService {
                     desired_price:desired_price
                 }
             });
+            console.log("updated price");
             return _product;
             
          } catch (error) {
