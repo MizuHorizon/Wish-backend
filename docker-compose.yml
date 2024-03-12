@@ -23,6 +23,7 @@ services:
           context: ./
       ports:
         - 4000:4000
+      # command: /bin/sh -c '/app/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- npx ts-node src/app.ts'
       environment:
         - PORT=4000
         - DATABASE_URL=mongodb+srv://anshyyy:7903553605@cluster0.2xmu2cj.mongodb.net/Wish?retryWrites=true&w=majority

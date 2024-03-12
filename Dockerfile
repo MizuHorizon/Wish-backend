@@ -1,5 +1,5 @@
 # First stage: Build stage
-FROM node:alpine AS builder
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -11,12 +11,9 @@ COPY package*.json ./
 
 RUN apk update
 RUN apk upgrade
-RUN apk add bash
-RUN mkdir -p /app/bin
-
-# Download wait-for-it.sh using curl
-RUN wget -O /app/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
-    chmod +x /app/bin/wait-for-it.sh
+RUN apk add --no-cache bash
+RUN wget -O /bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+RUN chmod +x /bin/wait-for-it.sh
 
 
 
@@ -37,7 +34,7 @@ RUN npx prisma generate
 
 
 # Second stage: Production stage
-FROM node:alpine
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
@@ -49,4 +46,4 @@ COPY --from=builder /app /app
 EXPOSE 4000
 
 # Command to run the application
-CMD ["npm", "start"]
+CMD [ "npm","start" ]
