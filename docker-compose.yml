@@ -1,62 +1,51 @@
 version: "3.9"
-services: 
-   rabbitmq:
-        image: "rabbitmq:3.11.11-management"
-        hostname: rabbit
-        ports:
-          - "5672:5672"
-          - "15672:15672"
-        volumes:
-          - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-          - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-        healthcheck:
-          test: ["CMD", "rabbitmqctl", "wait", "--timeout", "60", "rabbitmq"]
-          interval: 10s
-          retries: 5
-          timeout: 30s
-        networks:
-          - rabbitmq_nodejs
+services:
+  rabbitmq:
+    image: "rabbitmq:3.11.11-management"
+    hostname: rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "wait", "--timeout", "30", "rabbitmq"]
+      interval: 10s
+      retries: 5
+      timeout: 30s
+    networks:
+      - rabbitmq_nodejs
 
+  my-nodejs:
+    build:
+      context: ./
+    ports:
+      - 4000:4000
+    environment:
+      - PORT=4000
+      - DATABASE_URL=mongodb+srv://anshyyy:7903553605@cluster0.2xmu2cj.mongodb.net/Wish?retryWrites=true&w=majority
+      - SALT=5
+      - JWT_KEY=baba
+      - MESSAGE_BROKER_URL=amqp://guest:guest@rabbitmq:5672
+      - QUEUE_NAME=product-queue
+      - QUEUE_NAME2=notification-queue
+      - EXCHANGE_NAME=WISH
+      - BINDING_KEY=PRODUCT_SERVICE
+      - NOTIFICATION_BINDING_KEY=NOTIFICATION_SERVICE
 
-   my-nodejs:
-      build:
-          context: ./
-      ports:
-        - 4000:4000
-      # command: /bin/sh -c '/app/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- npx ts-node src/app.ts'
-      environment:
-        - PORT=4000
-        - DATABASE_URL=mongodb+srv://anshyyy:7903553605@cluster0.2xmu2cj.mongodb.net/Wish?retryWrites=true&w=majority
-        - SALT=5
-        - JWT_KEY=baba
-        - MESSAGE_BROKER_URL=amqp://guest:guest@rabbitmq:5672
-        - QUEUE_NAME=product-queue
-        - QUEUE_NAME2=notification-queue
-        - EXCHANGE_NAME=WISH
-        - BINDING_KEY=PRODUCT_SERVICE
-        - NOTIFICATION_BINDING_KEY=NOTIFICATION_SERVICE
-      
-      develop:
-        watch:
-          - action: sync+restart
-          - path: .
-          - target: app/
-          - ignore:
-              - node_modules/
-              - .env
-          - action: rebuild
-          - path: package.json
-      
-      depends_on:
-        - rabbitmq
-        
-      networks:
-        - rabbitmq_nodejs
-          
+    command: sh -c "/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- npm start"
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+    depends_on:
+      - rabbitmq
+
+    networks:
+      - rabbitmq_nodejs
+
 networks:
   rabbitmq_nodejs:
     driver: bridge
-       
-
-
-  

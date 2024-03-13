@@ -1,49 +1,25 @@
-# First stage: Build stage
-FROM node:20-alpine AS builder
 
-# Set working directory
-WORKDIR /app
-
-# Copy package.json and package-lock.json
+FROM node:18-alpine as base
+WORKDIR /src
 COPY package*.json ./
 
-# Install curl and other necessary tools
+FROM base as production
+ENV NODE_ENV=production
+RUN npm ci
+COPY . .
+CMD ["npm", "start"]
 
-RUN apk update
-RUN apk upgrade
+FROM base as dev
 RUN apk add --no-cache bash
 RUN wget -O /bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x /bin/wait-for-it.sh
 
-
-
-# Install dependencies
+ENV NODE_ENV=development
 RUN npm install
-
-RUN npx puppeteer browsers install chrome
-
-# Copy the entire source code
 COPY src src
 
-# Change working directory to src
-WORKDIR /app/src
-
-# Run Prisma generate
-RUN npx prisma generate
+RUN cd /src && npx prisma generate
+RUN cd ..
 
 
-
-# Second stage: Production stage
-FROM node:18-alpine
-
-# Set working directory
-WORKDIR /app
-
-# Copy only the necessary files from the previous stage
-COPY --from=builder /app /app
-
-# Expose port
-EXPOSE 4000
-
-# Command to run the application
-CMD [ "npm","start" ]
+CMD ["npm", "start"]
