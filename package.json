@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "start": "nodemon src/app.ts"
+    "start": "nodemon src/app.ts",
+    "build":"tsc",
+    "prestart": "npm run build"
   },
   "keywords": [],
   "author": "",

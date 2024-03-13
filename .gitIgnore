@@ -2,3 +2,4 @@
 .env
 /.env
 /src/config/wish-firebase.json
+/dist
