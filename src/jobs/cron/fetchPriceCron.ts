@@ -31,6 +31,26 @@ export const job = new CronJob("0 * * * *", async function () {
         let priceArray = product.prices;
         let price: number = -1;
         
+        if(product.company === "snitch"){
+          try {
+            price = await tracker.getFromSnitch(product.url) as number ;
+            console.log(price);
+            priceArray.push(JSON.stringify({ price: price, date: new Date() }));
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        if(product.company === "bewakoof"){
+          try {
+            price = await tracker.getFromSnitch(product.url) as number ;
+            console.log(price);
+            priceArray.push(JSON.stringify({ price: price, date: new Date() }));
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
         if (product.company === "amazon") {
           try {
             price = await tracker.getFromAmazon(product.url);
