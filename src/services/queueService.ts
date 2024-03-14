@@ -5,8 +5,6 @@ const productService = new ProductService();
 import {getProductDetails} from "../middlewares/getProductDetails";
 import { IProduct, IScrapredProduct } from "../interface/utilInterface";
 import {sendNotification} from "../services/firebaseNotificationService";
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 
 
@@ -113,42 +111,42 @@ export const publishMessage = async (
 };
 
 
-const getProxyLink = async(url:string)=>{
-      try {
-        const browser = await puppeteer.launch({ headless: true,args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-        ],});
+// const getProxyLink = async(url:string)=>{
+//       try {
+//         const browser = await puppeteer.launch({ headless: true,args: [
+//           '--no-sandbox',
+//           '--disable-setuid-sandbox',
+//         ],});
     
-          const page = await browser.newPage();
-          await page.setUserAgent(
-            'AppleWebKit/537.36 (KHTML, like Gecko) Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124 Safari/537.36'
-          );
-          await page.setViewport({ width: 1280, height: 800 });
+//           const page = await browser.newPage();
+//           await page.setUserAgent(
+//             'AppleWebKit/537.36 (KHTML, like Gecko) Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124 Safari/537.36'
+//           );
+//           await page.setViewport({ width: 1280, height: 800 });
     
-          // Use Puppeteer Extra Stealth Plugin
-          puppeteer.use(StealthPlugin());
+//           // Use Puppeteer Extra Stealth Plugin
+//           puppeteer.use(StealthPlugin());
     
-          // Navigate the page to a URL
-          await page.goto("https://proxyium.com/", { timeout: 60000 });
-          await page.waitForSelector('#unique-form-control');
+//           // Navigate the page to a URL
+//           await page.goto("https://proxyium.com/", { timeout: 60000 });
+//           await page.waitForSelector('#unique-form-control');
 
-         // Fill the input field with the value "abc"
-         await page.type('#unique-form-control', url);
-          // Click the "GO" button
-          await Promise.all([
-            page.waitForNavigation(), // Wait for navigation to complete
-            page.click('#unique-btn-blue'), // Click the button
-          ]);
+//          // Fill the input field with the value "abc"
+//          await page.type('#unique-form-control', url);
+//           // Click the "GO" button
+//           await Promise.all([
+//             page.waitForNavigation(), // Wait for navigation to complete
+//             page.click('#unique-btn-blue'), // Click the button
+//           ]);
       
-          // Get the URL of the second page
-          const secondPageUrl = page.url();
-          console.log('URL of the second page:', secondPageUrl);
-          return secondPageUrl;
+//           // Get the URL of the second page
+//           const secondPageUrl = page.url();
+//           console.log('URL of the second page:', secondPageUrl);
+//           return secondPageUrl;
          
-      } catch (error) {
-        console.error(error);
-      }
-}
+//       } catch (error) {
+//         console.error(error);
+//       }
+// }
 
 //getProxyLink("https://www.myntra.com/shirts/the+bear+house/the-bear-house-vertical-striped-slim-fit-cotton-casual-shirt/27631100/buy");

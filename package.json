@@ -5,7 +5,6 @@
   "main": "app.ts",
   "scripts": {
     "start": "nodemon src/app.ts",
-     
     "build": "tsc"
   },
   "keywords": [],
@@ -25,8 +24,6 @@
     "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.0.3",
     "puppeteer": "^21.7.0",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "puppeteer-proxy": "^2.1.2",
     "randombytes": "^2.1.0",
     "ts-node": "^10.9.2",
