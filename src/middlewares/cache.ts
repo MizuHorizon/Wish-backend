@@ -1,10 +1,10 @@
-import redis from "../config/redisConfig";
-import { Request, Response } from "express";
+// import redis from "../config/redisConfig";
+// import { Request, Response } from "express";
 
-export const checkForCachedProduct = (req:Request,res:Response,next:any)=>{
-    try {
+// export const checkForCachedProduct = (req:Request,res:Response,next:any)=>{
+//     try {
         
-     const productUrl : string = req.body.url as string;
+//      const productUrl : string = req.body.url as string;
 
      
 
@@ -12,7 +12,7 @@ export const checkForCachedProduct = (req:Request,res:Response,next:any)=>{
 
 
 
-    } catch (error) {
+//     } catch (error) {
         
-    }
-} 
+//     }
+// } 
