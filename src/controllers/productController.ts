@@ -148,7 +148,7 @@ export const getProductbyId = async (req: Request, res: Response) => {
     const productId: string = req.params.id;
     const _product = await productService.getProductbyId(productId);
     return res.status(201).json({
-      message: "SuccessFully fetched the Product",
+      message: "SuccessFully fetched the Productt",
       success: true,
       err: "",
       data: _product,
@@ -168,7 +168,7 @@ export const getProductbyIdOfUser = async (req: Request, res: Response) => {
     console.log(userId);
     const _product = await productService.getProductbyIdOfUser(userId);
     return res.status(201).json({
-      message: "SuccessFully fetched the Product",
+      message: "SuccessFully fetched the Producttt",
       success: true,
       err: "",
       data: _product,
@@ -190,7 +190,7 @@ export const getTrackableProductbyIdOfUser = async (
     const userId = req.query.userId as string;
     const _product = await productService.getTrackableProductbyIdOfUser(userId);
     return res.status(201).json({
-      message: "SuccessFully fetched the Product",
+      message: "SuccessFully fetched the Productttt",
       success: true,
       err: "",
       data: _product,
