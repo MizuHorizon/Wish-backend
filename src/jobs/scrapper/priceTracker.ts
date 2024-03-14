@@ -29,7 +29,7 @@ class PriceTracker {
       await browser.close();
     }
   }
-  #extractPrice(price:string){
+  extractPrice(price:string){
     let res = "";
     for(let c of price){
      if (c >= '0' && c <= '9') {
@@ -56,7 +56,7 @@ class PriceTracker {
           return element!.textContent!.trim();
         });
         console.log(productPrice);
-        return this.#extractPrice(productPrice);
+        return this.extractPrice(productPrice);
       } catch (error) {
         console.log(error);
         throw error;

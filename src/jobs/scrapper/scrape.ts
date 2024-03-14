@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import { IScrapredProduct } from "../../interface/utilInterface";
 
 class ScrapeProductDetails {
   async getFromAmazon(productUrl: string) {
@@ -59,7 +60,7 @@ class ScrapeProductDetails {
     }
   }
 
-  #extractPrice(price:string){
+   extractPrice(price:string){
      let res = "";
      for(let c of price){
       if (c >= '0' && c <= '9') {
@@ -103,7 +104,7 @@ class ScrapeProductDetails {
 
       const flipkartData = {
         name: productName,
-        price: this.#extractPrice(productPrice),
+        price: this.extractPrice(productPrice),
         photo: [productPhoto],
         currencySymbol : "₹"
       };
@@ -167,11 +168,26 @@ class ScrapeProductDetails {
       await browser.close();
     }
   }
+ 
+  
+  // Function to retrieve a random proxy from the list
+ getRandomProxy() {
+    const proxyList = [
+      { ip: '122.185.198.242', port: '7999', protocol: 'HTTP' },
+      { ip: '103.50.76.98', port: '443', protocol: 'HTTP' },
+      // Add more proxy objects here
+    ];
+    const randomIndex = Math.floor(Math.random() * proxyList.length);
+    const proxy = proxyList[randomIndex];
+    return `${proxy.protocol}://${proxy.ip}:${proxy.port}`;
+  }
+  
 
   async getFromMyntra(productUrl: string) {
     const browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: ['--no-sandbox', '--disable-setuid-sandbox',
+     ],
     });
 
     try {
@@ -179,6 +195,8 @@ class ScrapeProductDetails {
       await page.setUserAgent(
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
       );
+      await page.setDefaultNavigationTimeout(120000); // Increase the timeout for navigation operations
+      await page.setDefaultTimeout(120000); 
       // Navigate the page to a URL
       await page.goto(productUrl, { timeout: 60000 });
       await page.waitForTimeout(2000);
@@ -222,11 +240,69 @@ class ScrapeProductDetails {
       await browser.close();
     }
   }
+ 
+  async getFromSnitch(productUrl:string){
+   
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox',
+     ],
+    });
+    try {
+      const page = await browser.newPage();
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      );
+      // await page.setDefaultTimeout(60000); 
+      // Navigate the page to a URL
+      await page.goto(productUrl, { timeout: 60000 });
+      //await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(2000);
+      const imgSrc = await page.evaluate(() => {
+        const imgElement = document.querySelector('img.photoswipe__image');
+        return imgElement ? imgElement.getAttribute('src') : null;
+      });
+    
+      //console.log(imgSrc?.split("//")[1]);
+
+      const price:string = await page.evaluate(() => {
+        const priceElement = document.querySelector('span.product__price');
+        return priceElement ? priceElement.textContent!.trim() :"";
+      });
+    
+    //  console.log(price);
+
+      const title = await page.evaluate(() => {
+        const titleElement = document.querySelector('h1.product-single__title');
+        return titleElement ? titleElement.textContent!.trim() : null;
+      });
+    
+     // console.log(title);
+
+      const snitchData = {
+        name: title as string,
+        photos: [imgSrc?.split("//")[1] as string],
+        price: price.split(" ")[1].split(',').join(""),
+        currencySymbol : "₹"
+      }
+      console.log(snitchData);
+
+      return snitchData;
+
+    } catch (error) {
+       console.error(error);
+    } finally{
+      await browser.close();
+    }
+  }
+   
+   
+
+
+
 }
 
 export default ScrapeProductDetails;
 
 // const x = new ScrapeProductDetails();
-// x.getFromAjio(
-//   "https://www.ajio.com/avaasa-mix-n-match-embellished-dupatta-with-tassels/p/443016925_gold"
-// );
+// x.getFromSnitch("https://www.snitch.co.in/products/mandarinmystique-red-shirt?variant=44201302982818");
