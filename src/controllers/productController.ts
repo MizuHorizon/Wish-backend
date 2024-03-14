@@ -44,7 +44,7 @@ export const createProduct = async (req: Request, res: Response) => {
 export const processProductRequest = async (req: Request, res: Response) => {
   try {
     const channel = await createChannel();
-    const user_id = req.params.id;
+    const user_id = req.params.userid;
     console.log(req.body);
 
     let productData = {
