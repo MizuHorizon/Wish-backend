@@ -139,5 +139,42 @@ class PriceTracker {
         await browser.close();
       }
   }
+  async getFromSnitch(productUrl:string){
+   
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox',
+     ],
+    });
+    try {
+      const page = await browser.newPage();
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      );
+      // await page.setDefaultTimeout(60000); 
+      // Navigate the page to a URL
+      await page.goto(productUrl, { timeout: 60000 });
+      //await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(2000);
+      const price:string = await page.evaluate(() => {
+        const priceElement = document.querySelector('span.product__price');
+        return priceElement ? priceElement.textContent!.trim() :"";
+      });
+    
+
+    
+
+  
+   return Number(price.split(" ")[1].split(',').join(""));
+  
+  
+   
+
+    } catch (error) {
+       console.error(error);
+    } finally{
+      await browser.close();
+    }
+  }
 }
 export default PriceTracker;
