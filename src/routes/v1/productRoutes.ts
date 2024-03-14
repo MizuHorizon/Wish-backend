@@ -18,7 +18,7 @@ import {getProductDetails} from "../../middlewares/getProductDetails";
 
 
 //app.post("/:id", getProductDetails,createProduct);
-app.post("/:id", processProductRequest);
+app.post("/:id/process", processProductRequest);
 app.get("/:id", getProductbyId);
 app.get("/", getProductbyIdOfUser);
 app.get("/track", getTrackableProductbyIdOfUser);
