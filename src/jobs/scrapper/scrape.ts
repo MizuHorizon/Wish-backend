@@ -323,15 +323,13 @@ class ScrapeProductDetails {
       // console.log("Text with ID:", textWithId);
 
       // Extracting text using class name
-      await page.waitForTimeout(60000); // 60,000 milliseconds = 1 minute
-
       // Wait for the element with class 'productName' to be available
-      await page.waitForSelector('.productName');
+      // await page.waitForSelector('.productName');
     
-      const textWithClass = await page.$eval(".productName", (element) =>
-        element!.textContent!.trim()
-      );
-      console.log("Text with class:", textWithClass);
+      // const textWithClass = await page.$eval(".productName", (element) =>
+      //   element!.textContent!.trim()
+      // );
+      // console.log("Text with class:", textWithClass);
       // const title = await page.evaluate(() => {
       //   const manufacturerElement = document.querySelector('h3.col-xs-12.col-sm-12.noPd.brandNameV3');
       //   return manufacturerElement ? manufacturerElement!.textContent!.trim() : null;
@@ -343,7 +341,10 @@ class ScrapeProductDetails {
       //     : textWithClass.length > textWithId.length
       //     ? textWithClass
       //     : textWithId;
-      const title = textWithClass;
+      await page.waitForSelector('title');
+
+      // Extracting title
+      const title = await page.title();
       return {
         name: title,
         photos: [src],
