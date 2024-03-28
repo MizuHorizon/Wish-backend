@@ -323,6 +323,11 @@ class ScrapeProductDetails {
       // console.log("Text with ID:", textWithId);
 
       // Extracting text using class name
+      await page.waitForTimeout(60000); // 60,000 milliseconds = 1 minute
+
+      // Wait for the element with class 'productName' to be available
+      await page.waitForSelector('.productName');
+    
       const textWithClass = await page.$eval(".productName", (element) =>
         element!.textContent!.trim()
       );
