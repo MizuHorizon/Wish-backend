@@ -317,10 +317,10 @@ class ScrapeProductDetails {
       });
 
       // Extracting text using ID
-      const textWithId = await page.$eval("#testProName", (element) =>
-        element!.textContent!.trim()
-      );
-      console.log("Text with ID:", textWithId);
+      // const textWithId = await page.$eval("#testProName", (element) =>
+      //   element!.textContent!.trim()
+      // );
+      // console.log("Text with ID:", textWithId);
 
       // Extracting text using class name
       const textWithClass = await page.$eval(".productName", (element) =>
@@ -332,12 +332,13 @@ class ScrapeProductDetails {
       //   return manufacturerElement ? manufacturerElement!.textContent!.trim() : null;
       // });
 
-      const title =
-        textWithClass == textWithId
-          ? textWithClass
-          : textWithClass.length > textWithId.length
-          ? textWithClass
-          : textWithId;
+      // const title =
+      //   textWithClass == textWithId
+      //     ? textWithClass
+      //     : textWithClass.length > textWithId.length
+      //     ? textWithClass
+      //     : textWithId;
+      const title = textWithClass;
       return {
         name: title,
         photos: [src],
