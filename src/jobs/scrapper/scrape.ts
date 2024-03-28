@@ -316,13 +316,34 @@ class ScrapeProductDetails {
         return priceElement ? priceElement.textContent : null;
       });
 
-      const title = await page.evaluate(() => {
-        const manufacturerElement = document.querySelector('h3.col-xs-12.col-sm-12.noPd.brandNameV3');
-        return manufacturerElement ? manufacturerElement!.textContent!.trim() : null;
-      });
-      
+      // Extracting text using ID
+      const textWithId = await page.$eval("#testProName", (element) =>
+        element!.textContent!.trim()
+      );
+      console.log("Text with ID:", textWithId);
 
-      return { name:title,photos:[src], price:price?.split("₹")[1],currencySymbol:"₹" };
+      // Extracting text using class name
+      const textWithClass = await page.$eval(".productName", (element) =>
+        element!.textContent!.trim()
+      );
+      console.log("Text with class:", textWithClass);
+      // const title = await page.evaluate(() => {
+      //   const manufacturerElement = document.querySelector('h3.col-xs-12.col-sm-12.noPd.brandNameV3');
+      //   return manufacturerElement ? manufacturerElement!.textContent!.trim() : null;
+      // });
+
+      const title =
+        textWithClass == textWithId
+          ? textWithClass
+          : textWithClass.length > textWithId.length
+          ? textWithClass
+          : textWithId;
+      return {
+        name: title,
+        photos: [src],
+        price: price?.split("₹")[1],
+        currencySymbol: "₹",
+      };
     } catch (error) {
       console.error(error);
     } finally {
@@ -330,55 +351,57 @@ class ScrapeProductDetails {
     }
   }
 
- async getFromBonkers(productUrl:string){
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-  try {
-    const page = await browser.newPage();
-    await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    );
-    // await page.setDefaultTimeout(60000);
-    // Navigate the page to a URL
-    await page.goto(productUrl, { timeout: 60000 });
-  
-    await page.waitForTimeout(2000);
-    const imgSrc = await page.evaluate(() => {
-      const imgElement = document.querySelector('div#splide02-slide01 img');
-      return imgElement ? imgElement.getAttribute('src') : null;
+  async getFromBonkers(productUrl: string) {
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-    const productTitle = await page.evaluate(() => {
-      const titleElement = document.querySelector('h1.product_title.entry-title');
-      return titleElement ? titleElement.textContent!.trim() : null;
-    });
-    const priceAmount = await page.evaluate(() => {
-      const priceElement = document.querySelector('span.woocommerce-Price-amount.amount');
-      return priceElement ? priceElement!.textContent!.trim() : null;
-    });
-    
-    // console.log('Price Amount:', priceAmount);
-    // console.log('Name:', productTitle);
-    // console.log('Image Source:', imgSrc);
+    try {
+      const page = await browser.newPage();
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      );
+      // await page.setDefaultTimeout(60000);
+      // Navigate the page to a URL
+      await page.goto(productUrl, { timeout: 60000 });
 
-    const bonkersData = {
-      name: productTitle as string,
-      photos: [imgSrc as string],
-      price: priceAmount!.split("₹")[1].split('.')[0],
-      currencySymbol: "₹",
-    };
-    console.log(bonkersData);
+      await page.waitForTimeout(2000);
+      const imgSrc = await page.evaluate(() => {
+        const imgElement = document.querySelector("div#splide02-slide01 img");
+        return imgElement ? imgElement.getAttribute("src") : null;
+      });
+      const productTitle = await page.evaluate(() => {
+        const titleElement = document.querySelector(
+          "h1.product_title.entry-title"
+        );
+        return titleElement ? titleElement.textContent!.trim() : null;
+      });
+      const priceAmount = await page.evaluate(() => {
+        const priceElement = document.querySelector(
+          "span.woocommerce-Price-amount.amount"
+        );
+        return priceElement ? priceElement!.textContent!.trim() : null;
+      });
 
-    return bonkersData;
-    
-   } catch (error) {
-    console.error(error);
-   } finally{
-    await browser.close();
-   }
- }
+      // console.log('Price Amount:', priceAmount);
+      // console.log('Name:', productTitle);
+      // console.log('Image Source:', imgSrc);
 
+      const bonkersData = {
+        name: productTitle as string,
+        photos: [imgSrc as string],
+        price: priceAmount!.split("₹")[1].split(".")[0],
+        currencySymbol: "₹",
+      };
+      console.log(bonkersData);
+
+      return bonkersData;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      await browser.close();
+    }
+  }
 }
 
 export default ScrapeProductDetails;
